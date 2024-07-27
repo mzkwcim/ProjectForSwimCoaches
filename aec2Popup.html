@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Wybierz parametry zadania AEC2</h2>
+    <form>
+      <label for="repetitions">Liczba powtórzeń:</label>
+      <select id="repetitions">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+      </select>
+      <br><br>
+      <label for="distance">Dystans:</label>
+      <select id="distance">
+        <option value="75">75m</option>
+        <option value="175">175m</option>
+        <option value="200">200m</option>
+        <option value="225">225m</option>
+        <option value="250">250m</option>
+        <option value="300">300m</option>
+      </select>
+      <br><br>
+      <label for="hardSegment">Długość odcinka pływanego mocno:</label>
+      <select id="hardSegment">
+        <option value="25">25m</option>
+        <option value="50">50m</option>
+        <option value="75">75m</option>
+        <option value="100">100m</option>
+      </select>
+      <br><br>
+      <label for="rest">Przerwa:</label>
+      <select id="rest">
+        <option value="90">1'30"</option>
+        <option value="105">1'45"</option>
+        <option value="120">2'</option>
+        <option value="135">2'15"</option>
+        <option value="150">2'30"</option>
+        <option value="165">2'45"</option>
+        <option value="180">3'</option>
+        <option value="195">3'15"</option>
+        <option value="210">3'30"</option>
+        <option value="225">3'45"</option>
+        <option value="240">4'</option>
+        <option value="255">4'15"</option>
+        <option value="270">4'30"</option>
+        <option value="285">4'45"</option>
+        <option value="300">5'</option>
+        <option value="315">5'15"</option>
+        <option value="330">5'30"</option>
+        <option value="345">5'45"</option>
+        <option value="360">6'</option>
+      </select>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitAEC2Params()">
+    </form>
+    <script>
+      function submitAEC2Params() {
+        var repetitions = document.getElementById('repetitions').value;
+        var distance = document.getElementById('distance').value;
+        var hardSegment = document.getElementById('hardSegment').value;
+        var rest = document.getElementById('rest').value;
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processAEC2Params(repetitions, distance, hardSegment, rest);
+      }
+    </script>
+  </body>
+</html>
