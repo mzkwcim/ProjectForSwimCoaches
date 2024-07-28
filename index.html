@@ -1,109 +1,108 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base target="_top">
-    <style>
-      #container {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-      #availableParts, #selectedParts {
-        width: auto;
-        height: 200px;
-        min-width: 200px; /* Minimalna szerokość */
-      }
-      button {
-        display: block;
-        margin: 10px 0;
-      }
-    </style>
-  </head>
-  <body>
-    <h2>Wybierz części treningu</h2>
-    <div id="container">
-      <div>
-        <h3>Możliwe części treningu</h3>
-        <select id="availableParts" size="10" multiple>
-          <option value="Rozpływanie">Rozpływanie</option>
-          <option value="Zadanie Dogrzewające">Zadanie Dogrzewające</option>
-          <option value="Zadanie Główne">Zadanie Główne</option>
-          <option value="Rozpływanie">Rozpływanie</option>
-          <option value="Zadanie główne część druga">Zadanie główne część druga</option>
-          <option value="Rozpływanie końcowe">Rozpływanie końcowe</option>
-        </select>
-        <button onclick="addParts()">Dodaj</button>
-      </div>
-      <div>
-        <h3>Wybrane części treningu</h3>
-        <select id="selectedParts" size="10" multiple></select>
-        <button onclick="removeParts()">Usuń</button>
-      </div>
+<head>
+  <base target="_top">
+  <style>
+    #container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    #availableParts, #selectedParts {
+      width: auto;
+      height: 200px;
+      min-width: 200px; /* Minimalna szerokość */
+    }
+    button {
+      display: block;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Wybierz części treningu</h2>
+  <div id="container">
+    <div>
+      <h3>Możliwe części treningu</h3>
+      <select id="availableParts" size="10" multiple>
+        <option value="Rozpływanie">Rozpływanie</option>
+        <option value="Zadanie Dogrzewające">Zadanie Dogrzewające</option>
+        <option value="Zadanie Główne">Zadanie Główne</option>
+        <option value="Zadanie główne część druga">Zadanie główne część druga</option>
+        <option value="Rozpływanie końcowe">Rozpływanie końcowe</option>
+      </select>
+      <button onclick="addParts()">Dodaj</button>
     </div>
-    <br>
-    <input type="button" value="Dodaj do tabeli" onclick="addTrainingPartsToTable()">
-    <script>
-      // Funkcja do ustawiania szerokości list rozwijanych
-      function setSelectWidth() {
-        var selects = document.querySelectorAll('select');
-        selects.forEach(function(select) {
-          var maxWidth = 0;
-          for (var i = 0; i < select.options.length; i++) {
-            var option = select.options[i];
-            var testDiv = document.createElement('div');
-            testDiv.style.position = 'absolute';
-            testDiv.style.visibility = 'hidden';
-            testDiv.style.height = 'auto';
-            testDiv.style.width = 'auto';
-            testDiv.style.whiteSpace = 'nowrap';
-            testDiv.style.font = '12px Arial'; // Dostosuj do używanej czcionki
-            testDiv.innerHTML = option.text;
-            document.body.appendChild(testDiv);
-            var optionWidth = testDiv.clientWidth;
-            document.body.removeChild(testDiv);
-            if (optionWidth > maxWidth) {
-              maxWidth = optionWidth;
-            }
-          }
-          select.style.width = (maxWidth + 20) + 'px'; // Dodaj trochę zapasu
-        });
-      }
-
-      function addParts() {
-        var availableParts = document.getElementById('availableParts');
-        var selectedParts = document.getElementById('selectedParts');
-        for (var i = 0; i < availableParts.options.length; i++) {
-          if (availableParts.options[i].selected) {
-            var newOption = document.createElement('option');
-            newOption.value = availableParts.options[i].value;
-            newOption.text = availableParts.options[i].text;
-            selectedParts.appendChild(newOption);
+    <div>
+      <h3>Wybrane części treningu</h3>
+      <select id="selectedParts" size="10" multiple></select>
+      <button onclick="removeParts()">Usuń</button>
+    </div>
+  </div>
+  <br>
+  <input type="button" value="Dodaj do tabeli" onclick="addTrainingPartsToTable()">
+  <script>
+    // Funkcja do ustawiania szerokości list rozwijanych
+    function setSelectWidth() {
+      var selects = document.querySelectorAll('select');
+      selects.forEach(function(select) {
+        var maxWidth = 0;
+        for (var i = 0; i < select.options.length; i++) {
+          var option = select.options[i];
+          var testDiv = document.createElement('div');
+          testDiv.style.position = 'absolute';
+          testDiv.style.visibility = 'hidden';
+          testDiv.style.height = 'auto';
+          testDiv.style.width = 'auto';
+          testDiv.style.whiteSpace = 'nowrap';
+          testDiv.style.font = '12px Arial'; // Dostosuj do używanej czcionki
+          testDiv.innerHTML = option.text;
+          document.body.appendChild(testDiv);
+          var optionWidth = testDiv.clientWidth;
+          document.body.removeChild(testDiv);
+          if (optionWidth > maxWidth) {
+            maxWidth = optionWidth;
           }
         }
-      }
-
-      function removeParts() {
-        var selectedParts = document.getElementById('selectedParts');
-        for (var i = selectedParts.options.length - 1; i >= 0; i--) {
-          if (selectedParts.options[i].selected) {
-            selectedParts.remove(i);
-          }
-        }
-      }
-
-      function addTrainingPartsToTable() {
-        var selectedParts = [];
-        var selectedPartsSelect = document.getElementById('selectedParts');
-        for (var i = 0; i < selectedPartsSelect.options.length; i++) {
-          selectedParts.push(selectedPartsSelect.options[i].value);
-        }
-        google.script.run.addSelectedPartsToTable(selectedParts);
-        google.script.host.close();
-      }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        setSelectWidth();
+        select.style.width = (maxWidth + 20) + 'px'; // Dodaj trochę zapasu
       });
-    </script>
-  </body>
+    }
+
+    function addParts() {
+      var availableParts = document.getElementById('availableParts');
+      var selectedParts = document.getElementById('selectedParts');
+      for (var i = 0; i < availableParts.options.length; i++) {
+        if (availableParts.options[i].selected) {
+          var newOption = document.createElement('option');
+          newOption.value = availableParts.options[i].value;
+          newOption.text = availableParts.options[i].text;
+          selectedParts.appendChild(newOption);
+        }
+      }
+    }
+
+    function removeParts() {
+      var selectedParts = document.getElementById('selectedParts');
+      for (var i = selectedParts.options.length - 1; i >= 0; i--) {
+        if (selectedParts.options[i].selected) {
+          selectedParts.remove(i);
+        }
+      }
+    }
+
+    function addTrainingPartsToTable() {
+      var selectedParts = [];
+      var selectedPartsSelect = document.getElementById('selectedParts');
+      for (var i = 0; i < selectedPartsSelect.options.length; i++) {
+        selectedParts.push(selectedPartsSelect.options[i].value);
+      }
+      google.script.run.addSelectedPartsToTable(selectedParts);
+      google.script.host.close();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setSelectWidth();
+    });
+  </script>
+</body>
 </html>

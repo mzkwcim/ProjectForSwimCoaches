@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Dodaj nową część treningu</h2>
+    <label for="trainingPart">Wybierz część treningu:</label>
+    <select id="trainingPart">
+      <option value="Rozpływanie">Rozpływanie</option>
+      <option value="Zadanie Dogrzewające">Zadanie Dogrzewające</option>
+      <option value="Zadanie Główne">Zadanie Główne</option>
+      <option value="Rozpływanie">Rozpływanie</option>
+      <option value="Zadanie główne część druga">Zadanie główne część druga</option>
+      <option value="Rozpływanie końcowe">Rozpływanie końcowe</option>
+    </select>
+    <br><br>
+    <label for="rowNumber">Numer wiersza, przed którym dodać nowy wiersz:</label>
+    <input type="number" id="rowNumber" min="1">
+    <br><br>
+    <button onclick="submitForm()">Dodaj</button>
+    <script>
+      function submitForm() {
+        const trainingPart = document.getElementById('trainingPart').value;
+        const rowNumber = document.getElementById('rowNumber').value;
+        google.script.run.withSuccessHandler(() => {
+          google.script.host.close();
+        }).processNewRow(trainingPart, rowNumber);
+      }
+    </script>
+  </body>
+</html>

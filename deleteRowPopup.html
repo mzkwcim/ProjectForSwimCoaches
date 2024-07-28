@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Usuń wiersz</h2>
+    <label for="rowNumber">Wybierz numer wiersza do usunięcia:</label>
+    <select id="rowNumber">
+      <!-- Wiersze będą dynamicznie dodawane przez skrypt -->
+    </select>
+    <br><br>
+    <button onclick="submitForm()">Usuń</button>
+    <script>
+      function submitForm() {
+        const rowNumber = document.getElementById('rowNumber').value;
+        google.script.run.withSuccessHandler(() => {
+          google.script.host.close();
+        }).deleteSelectedRow(rowNumber);
+      }
+
+      // Funkcja do wypełnienia listy rozwijanej
+      function populateRowNumbers(rowNumbers) {
+        const select = document.getElementById('rowNumber');
+        rowNumbers.forEach(number => {
+          const option = document.createElement('option');
+          option.value = number;
+          option.text = number;
+          select.appendChild(option);
+        });
+      }
+
+      // Pobierz numery wierszy z Apps Script
+      google.script.run.withSuccessHandler(populateRowNumbers).getRowNumbers();
+    </script>
+  </body>
+</html>

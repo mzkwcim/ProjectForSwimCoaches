@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Wybierz parametry zadania NN</h2>
+    <form id="nnForm">
+      <label for="subtaskType">Typ podzadania:</label>
+      <select id="subtaskType" onchange="updateSubtaskFields()">
+        <option value="AEC2">AEC2</option>
+        <option value="ANC">ANC</option>
+        <option value="AEC1">AEC1</option>
+      </select>
+      <br><br>
+      <div id="subtaskFields"></div>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitNNParams()">
+    </form>
+    <script>
+      function updateSubtaskFields() {
+        var subtaskType = document.getElementById('subtaskType').value;
+        var subtaskFieldsDiv = document.getElementById('subtaskFields');
+        subtaskFieldsDiv.innerHTML = '';
+
+        if (subtaskType === 'ANC') {
+          subtaskFieldsDiv.innerHTML = `
+            <label for="series">Liczba serii:</label>
+            <select id="series">
+              ${generateOptions(1, 10)}
+            </select>
+            <br><br>
+            <label for="repetitions">Liczba powtórzeń:</label>
+            <select id="repetitions">
+              ${generateOptions(1, 10)}
+            </select>
+            <br><br>
+            <label for="distance">Dystans:</label>
+            <select id="distance">
+              <option value="25">25m</option>
+              <option value="50">50m</option>
+            </select>
+            <br><br>
+            <label for="rest">Przerwa:</label>
+            <select id="rest">
+              ${generateRestOptions(15, 480, 15)}
+            </select>
+          `;
+        } else if (subtaskType === 'AEC2') {
+          subtaskFieldsDiv.innerHTML = `
+            <label for="series">Liczba serii:</label>
+            <select id="series">
+              ${generateOptions(1, 10)}
+            </select>
+            <br><br>
+            <label for="totalDistance">Dystans cały:</label>
+            <select id="totalDistance">
+              <option value="100">100m</option>
+              <option value="200">200m</option>
+              <option value="300">300m</option>
+              <option value="400">400m</option>
+            </select>
+            <br><br>
+            <label for="hardSegmentDistance">Dystans mocnego odcinka:</label>
+            <select id="hardSegmentDistance">
+              <option value="25">25m</option>
+              <option value="50">50m</option>
+              <option value="75">75m</option>
+              <option value="100">100m</option>
+            </select>
+            <br><br>
+            <label for="rest">Przerwa:</label>
+            <select id="rest">
+              ${generateRestOptions(15, 480, 15)}
+            </select>
+          `;
+        } else if (subtaskType === 'AEC1') {
+          subtaskFieldsDiv.innerHTML = `
+            <label for="repetitions">Liczba powtórzeń:</label>
+            <select id="repetitions">
+              ${generateOptions(1, 10)}
+            </select>
+            <br><br>
+            <label for="distance">Dystans:</label>
+            <select id="distance">
+              <option value="100">100m</option>
+              <option value="200">200m</option>
+              <option value="300">300m</option>
+              <option value="400">400m</option>
+            </select>
+            <br><br>
+            <label for="rest">Przerwa:</label>
+            <select id="rest">
+              ${generateRestOptions(15, 480, 15)}
+            </select>
+          `;
+        }
+        // Inne podzadania można dodać tutaj w przyszłości
+      }
+
+      function generateOptions(start, end) {
+        var options = '';
+        for (var i = start; i <= end; i++) {
+          options += `<option value="${i}">${i}</option>`;
+        }
+        return options;
+      }
+
+      function generateRestOptions(start, end, step) {
+        var options = '';
+        for (var i = start; i <= end; i += step) {
+          var minutes = Math.floor(i / 60);
+          var seconds = i % 60;
+          var label = seconds ? `${minutes}'${seconds}"` : `${minutes}'`;
+          options += `<option value="${i}">${label}</option>`;
+        }
+        return options;
+      }
+
+      function submitNNParams() {
+        var subtaskType = document.getElementById('subtaskType').value;
+        var params = { subtaskType: subtaskType };
+
+        if (subtaskType === 'ANC') {
+          params.series = document.getElementById('series').value;
+          params.repetitions = document.getElementById('repetitions').value;
+          params.distance = document.getElementById('distance').value;
+          params.rest = document.getElementById('rest').value;
+        } else if (subtaskType === 'AEC2') {
+          params.series = document.getElementById('series').value;
+          params.totalDistance = document.getElementById('totalDistance').value;
+          params.hardSegmentDistance = document.getElementById('hardSegmentDistance').value;
+          params.rest = document.getElementById('rest').value;
+        } else if (subtaskType === 'AEC1') {
+          params.repetitions = document.getElementById('repetitions').value;
+          params.distance = document.getElementById('distance').value;
+          params.rest = document.getElementById('rest').value;
+        }
+
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processNNParams(params);
+      }
+
+      // Initialize the fields when the page loads
+      window.onload = updateSubtaskFields;
+    </script>
+  </body>
+</html>

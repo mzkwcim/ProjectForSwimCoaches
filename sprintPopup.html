@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Wybierz parametry zadania Sprint</h2>
+    <form id="sprintForm">
+      <label for="series">Liczba serii:</label>
+      <select id="series" onchange="updateSeriesFields()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <br><br>
+      <label for="defaultRepetitions">Liczba powtórzeń w serii:</label>
+      <select id="defaultRepetitions" onchange="updateSeriesFields()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <br><br>
+      <label for="rest">Przerwa:</label>
+      <select id="rest">
+        <option value="15">15"</option>
+        <option value="30">30"</option>
+        <option value="45">45"</option>
+        <option value="60">1'</option>
+        <option value="75">1'15"</option>
+        <option value="90">1'30"</option>
+        <option value="105">1'45"</option>
+        <option value="120">2'</option>
+        <option value="135">2'15"</option>
+        <option value="150">2'30"</option>
+        <option value="165">2'45"</option>
+        <option value="180">3'</option>
+        <option value="195">3'15"</option>
+        <option value="210">3'30"</option>
+        <option value="225">3'45"</option>
+        <option value="240">4'</option>
+      </select>
+      <br><br>
+      <div id="seriesFields"></div>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitSprintParams()">
+    </form>
+    <script>
+      function updateSeriesFields() {
+        var seriesCount = document.getElementById('series').value;
+        var defaultRepetitions = document.getElementById('defaultRepetitions').value;
+        var seriesFieldsDiv = document.getElementById('seriesFields');
+        seriesFieldsDiv.innerHTML = '';
+
+        for (var i = 1; i <= seriesCount; i++) {
+          var seriesField = document.createElement('div');
+          seriesField.innerHTML = `
+            <label for="repetitions${i}">Seria ${i} - Liczba powtórzeń:</label>
+            <select id="repetitions${i}">
+              <option value="1" ${defaultRepetitions == 1 ? 'selected' : ''}>1</option>
+              <option value="2" ${defaultRepetitions == 2 ? 'selected' : ''}>2</option>
+              <option value="3" ${defaultRepetitions == 3 ? 'selected' : ''}>3</option>
+              <option value="4" ${defaultRepetitions == 4 ? 'selected' : ''}>4</option>
+              <option value="5" ${defaultRepetitions == 5 ? 'selected' : ''}>5</option>
+              <option value="6" ${defaultRepetitions == 6 ? 'selected' : ''}>6</option>
+              <option value="7" ${defaultRepetitions == 7 ? 'selected' : ''}>7</option>
+              <option value="8" ${defaultRepetitions == 8 ? 'selected' : ''}>8</option>
+              <option value="9" ${defaultRepetitions == 9 ? 'selected' : ''}>9</option>
+              <option value="10" ${defaultRepetitions == 10 ? 'selected' : ''}>10</option>
+            </select>
+            <label for="accent${i}">Akcent:</label>
+            <select id="accent${i}">
+              <option value="Skok">Skok</option>
+              <option value="Nawrót">Nawrót</option>
+              <option value="Finisz">Finisz</option>
+            </select>
+            <br><br>
+          `;
+          seriesFieldsDiv.appendChild(seriesField);
+        }
+      }
+
+      function submitSprintParams() {
+        var seriesCount = document.getElementById('series').value;
+        var rest = document.getElementById('rest').value;
+        var seriesParams = [];
+
+        for (var i = 1; i <= seriesCount; i++) {
+          var repetitions = document.getElementById(`repetitions${i}`).value;
+          var accent = document.getElementById(`accent${i}`).value;
+          seriesParams.push({ repetitions: repetitions, accent: accent });
+        }
+
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processSprintParams(seriesParams, rest);
+      }
+
+      // Initialize the fields when the page loads
+      window.onload = updateSeriesFields;
+    </script>
+  </body>
+</html>
