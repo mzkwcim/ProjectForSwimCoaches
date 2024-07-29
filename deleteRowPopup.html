@@ -2,36 +2,44 @@
 <html>
   <head>
     <base target="_top">
+    <style>
+      #container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <h2>Usuń wiersz</h2>
-    <label for="rowNumber">Wybierz numer wiersza do usunięcia:</label>
-    <select id="rowNumber">
-      <!-- Wiersze będą dynamicznie dodawane przez skrypt -->
-    </select>
-    <br><br>
-    <button onclick="submitForm()">Usuń</button>
+    <div id="container">
+      <div>
+        <h3>Wybierz numer wiersza do usunięcia</h3>
+        <select id="rowNumberSelect" size="10"></select>
+        <button onclick="deleteRow()">Usuń</button>
+      </div>
+    </div>
     <script>
-      function submitForm() {
-        const rowNumber = document.getElementById('rowNumber').value;
-        google.script.run.withSuccessHandler(() => {
-          google.script.host.close();
-        }).deleteSelectedRow(rowNumber);
+      function populateRowNumbers() {
+        google.script.run.withSuccessHandler(function(rows) {
+          var select = document.getElementById('rowNumberSelect');
+          rows.forEach(function(row) {
+            var option = document.createElement('option');
+            option.value = row;
+            option.text = row;
+            select.appendChild(option);
+          });
+        }).getRowNumbers();
       }
 
-      // Funkcja do wypełnienia listy rozwijanej
-      function populateRowNumbers(rowNumbers) {
-        const select = document.getElementById('rowNumber');
-        rowNumbers.forEach(number => {
-          const option = document.createElement('option');
-          option.value = number;
-          option.text = number;
-          select.appendChild(option);
-        });
+      function deleteRow() {
+        var select = document.getElementById('rowNumberSelect');
+        var rowNumber = select.options[select.selectedIndex].value;
+        google.script.run.deleteSelectedRow(rowNumber);
+        google.script.host.close();
       }
 
-      // Pobierz numery wierszy z Apps Script
-      google.script.run.withSuccessHandler(populateRowNumbers).getRowNumbers();
+      document.addEventListener('DOMContentLoaded', populateRowNumbers);
     </script>
   </body>
 </html>
