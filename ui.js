@@ -5,13 +5,6 @@ function showTrainingPartsDialog() {
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz części treningu');
 }
 
-function showButton() {
-  var html = HtmlService.createHtmlOutputFromFile('button')
-      .setWidth(300)
-      .setHeight(100);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Dodaj wiersz');
-}
-
 function showANCPopup() {
   var html = HtmlService.createHtmlOutputFromFile('ancPopup')
       .setWidth(400)
@@ -66,4 +59,18 @@ function showTrainingPartsDialog() {
       .setWidth(500)
       .setHeight(400);
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz części treningu');
+}
+
+function addNewRow(sheet) {
+  var html = HtmlService.createHtmlOutputFromFile('newRowPopup')
+    .setWidth(400)
+    .setHeight(200);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Dodaj nową część treningu');
+}
+
+function showDeleteRowPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('deleteRowPopup')
+      .setWidth(400)
+      .setHeight(300);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Usuń wiersz');
 }

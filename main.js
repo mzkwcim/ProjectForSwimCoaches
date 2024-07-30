@@ -5,6 +5,13 @@ function onOpen() {
     .addToUi();
 }
 
+function showTrainingPartsDialog() {
+  var html = HtmlService.createHtmlOutputFromFile('index')
+      .setWidth(500)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz części treningu');
+}
+
 function addSelectedPartsToTable(selectedParts) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var headers = ['Część treningu', 'Opis zadania', 'Dystans', 'Typ zadania'];
@@ -16,7 +23,7 @@ function addSelectedPartsToTable(selectedParts) {
   for (var i = 0; i < numCols; i++) {
     sheet.getRange(1, i + 1).setValue(headers[i]);
   }
-  
+
   sheet.getRange(1, 1, 1, numCols).setFontWeight('bold').setFontSize(20);
 
   for (var row = 1; row <= selectedParts.length; row++) {

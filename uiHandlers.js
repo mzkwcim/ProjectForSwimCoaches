@@ -1,17 +1,3 @@
-function addNewRow(sheet) {
-  var html = HtmlService.createHtmlOutputFromFile('newRowPopup')
-    .setWidth(400)
-    .setHeight(200);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Dodaj nową część treningu');
-}
-
-function showDeleteRowPopup() {
-  var html = HtmlService.createHtmlOutputFromFile('deleteRowPopup')
-      .setWidth(400)
-      .setHeight(300);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Usuń wiersz');
-}
-
 function processNewRow(trainingPart, rowNumber) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var lastRow = sheet.getLastRow();
@@ -57,19 +43,6 @@ function deleteSelectedRow(rowNumber) {
 
   sheet.deleteRow(rowNum);
 
-  updatePosition(sheet);
-}
-
-function processTableChanges(rows) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var lastRow = sheet.getLastRow();
-
-  sheet.deleteRows(2, lastRow - 1);
-
-  rows.forEach((row, index) => {
-    sheet.insertRowAfter(index + 1);
-    sheet.getRange(index + 2, 1).setValue(row);
-  });
   updatePosition(sheet);
 }
 

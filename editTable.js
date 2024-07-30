@@ -48,22 +48,6 @@ function deleteSelectedRow(rowNumber) {
   relocate(sheet);
 }
 
-function processTableChanges(rows) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var lastRow = sheet.getLastRow();
-
-  sheet.deleteRows(2, lastRow - 1);
-
-  rows.forEach((row, index) => {
-    sheet.insertRowAfter(index + 1);
-    sheet.getRange(index + 2, 1).setValue(row);
-  });
-
-  updateBorders(sheet);
-
-  relocate(sheet);
-}
-
 function resetRow(row) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   sheet.getRange(row, 2, 1, 3).clearContent();

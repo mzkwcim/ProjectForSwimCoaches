@@ -7,28 +7,7 @@
     <h2>Wybierz parametry zadania AEC2</h2>
     <form>
       <label for="repetitions">Liczba powtórzeń:</label>
-      <select id="repetitions">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-      </select>
+      <select id="repetitions"></select>
       <br><br>
       <label for="distance">Dystans:</label>
       <select id="distance">
@@ -49,27 +28,7 @@
       </select>
       <br><br>
       <label for="rest">Przerwa:</label>
-      <select id="rest">
-        <option value="90">1'30"</option>
-        <option value="105">1'45"</option>
-        <option value="120">2'</option>
-        <option value="135">2'15"</option>
-        <option value="150">2'30"</option>
-        <option value="165">2'45"</option>
-        <option value="180">3'</option>
-        <option value="195">3'15"</option>
-        <option value="210">3'30"</option>
-        <option value="225">3'45"</option>
-        <option value="240">4'</option>
-        <option value="255">4'15"</option>
-        <option value="270">4'30"</option>
-        <option value="285">4'45"</option>
-        <option value="300">5'</option>
-        <option value="315">5'15"</option>
-        <option value="330">5'30"</option>
-        <option value="345">5'45"</option>
-        <option value="360">6'</option>
-      </select>
+      <select id="rest"></select>
       <br><br>
       <input type="button" value="Zatwierdź" onclick="submitAEC2Params()">
     </form>
@@ -83,6 +42,31 @@
           .withSuccessHandler(() => google.script.host.close())
           .processAEC2Params(repetitions, distance, hardSegment, rest);
       }
+      document.addEventListener("DOMContentLoaded", function() {
+        const selectElement = document.getElementById('repetitions');
+        const restSelect = document.getElementById('rest');
+            
+        for (let i = 1; i <= 20; i++) {
+            let option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            selectElement.appendChild(option);
+        }
+
+        const restIncrement = 15;
+        const maxRestValue = 600;
+            
+        for (let value = 15; value <= maxRestValue; value += restIncrement) {
+          let minutes = Math.floor(value / 60);
+          let seconds = value % 60;
+          let text = minutes > 0 ? `${minutes}'${seconds < 10 ? '0' : ''}${seconds}"` : `${seconds}"`;
+                
+          let option = document.createElement('option');
+          option.value = value;
+          option.text = text;
+          restSelect.appendChild(option);
+        }
+      });
     </script>
   </body>
 </html>
