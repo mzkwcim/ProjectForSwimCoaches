@@ -16,7 +16,7 @@ function processNewRow(trainingPart, rowNumber) {
 
   var typeCell = sheet.getRange(newRowNum, 4);
   var typeRule = SpreadsheetApp.newDataValidation()
-      .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
+      .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
       .setAllowInvalid(false)
       .build();
   typeCell.setDataValidation(typeRule);

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      #repetitionsContainer, #distanceContainer, #restContainer {
+        display: none; /* Ukrywa wybierajki na początku */
+      }
+    </style>
+  </head>
+  <body>
+    <label>Siema</label>
+    <br></br>
+    <form>
+      <label for="taskType">Wybierz typ zadania:</label>
+      <select id="taskType">
+        <option value="">--Wybierz typ zadania--</option>
+        <option value="BES">BES</option>
+        <option value="FES">FES</option>
+        <option value="BES + DPS">BES + DPS</option>
+        <option value="100m max">100m max</option>
+      </select>
+      <br></br>
+      <div id="distanceContainer">
+        <label for="distance">Wybierz dystans:</label>
+        <select id="distance">
+          <option value="">--Wybierz dystans--</option>
+          <option value="25m">25m</option>
+          <option value="50m">50m</option>
+        </select>
+        <br><br>
+      </div>
+      <div id="repetitionsContainer">
+        <label for="repetitions">Liczba powtórzeń:</label>
+        <select id="repetitions"></select>
+        <br><br>
+      </div>
+      <div id="restContainer">
+        <label for="rest">Czas przerwy:</label>
+        <select id="rest"></select>
+        <br><br>
+      </div>
+    </form>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const taskTypeElement = document.getElementById('taskType');
+        const distanceSelect = document.getElementById('distance');
+        const repetitionsContainer = document.getElementById('repetitionsContainer');
+        const repetitionsSelect = document.getElementById('repetitions');
+        const restContainer = document.getElementById('restContainer');
+        const restSelect = document.getElementById('rest');
+
+        function populateRepetitions(start, end) {
+          repetitionsSelect.innerHTML = ""; // Wyczyść poprzednie opcje
+          for (let i = start; i <= end; i++) {
+            let option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            repetitionsSelect.appendChild(option);
+          }
+        }
+
+        function populateRestOptions(options) {
+          restSelect.innerHTML = ""; // Wyczyść poprzednie opcje
+          options.forEach(optionText => {
+            let option = document.createElement('option');
+            option.value = optionText;
+            option.text = optionText;
+            restSelect.appendChild(option);
+          });
+        }
+
+        taskTypeElement.addEventListener('change', function() {
+          if (taskTypeElement.value === "BES") {
+            distanceContainer.style.display = "block";
+          } else {
+            distanceContainer.style.display = "none";
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+          }
+        });
+
+        distanceSelect.addEventListener('change', function() {
+          if (distanceSelect.value === "25m") {
+            populateRepetitions(20, 40);
+            populateRestOptions(['15"', '20"']);
+            repetitionsContainer.style.display = "block";
+            restContainer.style.display = "block";
+          } else if (distanceSelect.value === "50m") {
+            populateRepetitions(12, 30);
+            populateRestOptions(["1'", "1'15\""]);
+            repetitionsContainer.style.display = "block";
+            restContainer.style.display = "block";
+          } else {
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

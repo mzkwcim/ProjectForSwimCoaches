@@ -64,7 +64,7 @@ function showTrainingPartsDialog() {
 function addNewRow(sheet) {
   var html = HtmlService.createHtmlOutputFromFile('newRowPopup')
     .setWidth(400)
-    .setHeight(200);
+    .setHeight(300);
   SpreadsheetApp.getUi().showModalDialog(html, 'Dodaj nową część treningu');
 }
 
@@ -73,4 +73,11 @@ function showDeleteRowPopup() {
       .setWidth(400)
       .setHeight(300);
   SpreadsheetApp.getUi().showModalDialog(html, 'Usuń wiersz');
+}
+
+function showRPPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('rpPopup')
+      .setWidth(500)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania RP');
 }

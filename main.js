@@ -5,13 +5,6 @@ function onOpen() {
     .addToUi();
 }
 
-function showTrainingPartsDialog() {
-  var html = HtmlService.createHtmlOutputFromFile('index')
-      .setWidth(500)
-      .setHeight(400);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz części treningu');
-}
-
 function addSelectedPartsToTable(selectedParts) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var headers = ['Część treningu', 'Opis zadania', 'Dystans', 'Typ zadania'];
@@ -30,7 +23,7 @@ function addSelectedPartsToTable(selectedParts) {
     sheet.getRange(row + 1, 1).setValue(selectedParts[row - 1]);
     var typeCell = sheet.getRange(row + 1, 4);
     var typeRule = SpreadsheetApp.newDataValidation()
-        .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
+        .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
         .setAllowInvalid(false)
         .build();
     typeCell.setDataValidation(typeRule);
@@ -84,6 +77,9 @@ function onEdit(e) {
     } else if (value === "NN") {
       PropertiesService.getScriptProperties().setProperty('nnRow', range.getRow());
       showNNPopup();
+    } else if (value === "RP") {
+      PropertiesService.getScriptProperties().setProperty('rpRow', range.getRow());
+      showRPPopup();
     } else if (value === "Reset") {
       resetRow(range.getRow());
     }
