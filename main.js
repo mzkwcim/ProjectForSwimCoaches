@@ -54,6 +54,10 @@ function addSelectedPartsToTable(selectedParts) {
 }
 
 function onEdit(e) {
+  if (!e) {
+    return;
+  }
+
   var sheet = e.source.getActiveSheet();
   var range = e.range;
   var value = range.getValue().trim();
@@ -80,6 +84,9 @@ function onEdit(e) {
     } else if (value === "RP") {
       PropertiesService.getScriptProperties().setProperty('rpRow', range.getRow());
       showRPPopup();
+    } else if (value === "Technika"){
+      PropertiesService.getScriptProperties().setProperty('technikaRow', range.getRow());
+      showTechnikaPopup();
     } else if (value === "Reset") {
       resetRow(range.getRow());
     }
@@ -93,4 +100,9 @@ function onEdit(e) {
     }
     range.setValue('');
   }
+}
+
+function forceAuth() {
+  var ui = SpreadsheetApp.getUi();
+  ui.alert('Autoryzacja zakończona sukcesem!');
 }

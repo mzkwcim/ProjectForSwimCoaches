@@ -81,3 +81,10 @@ function showRPPopup() {
       .setHeight(400);
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania RP');
 }
+
+function showTechnikaPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('technikaPopup')
+      .setWidth(500)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania Technicznego');
+}

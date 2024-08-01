@@ -19,6 +19,32 @@ function processANCParams(series, repetitions, distance, rest) {
   formatLine(sheet, row, description, totalDistance);
 }
 
+function processRPParams(repetitions, distance, taskType, rest){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('rpRow');
+  var repetitionsInt = Math.floor(parseFloat(repetitions));
+  var distanceInt = Math.floor(parseFloat(distance));
+  if (taskType === "FES"){
+    description = repetitionsInt + " x (50m FES  1'30\" + 100m środek 2'30\" + 50m max + 400m dow)"; 
+    formatLine(sheet,row,description,distanceInt);
+  } else if (taskType === "BES + DPS"){
+    description = repetitionsInt + " x (10x50m dps 1'  + 5x50m BES R20-30\"  + 250m luz)";
+    formatLine(sheet,row,description,distanceInt);
+  } else if (taskType === "100m max"){
+    description = repetitionsInt + " x (4x100m dps R 15-30\" plus 1' + 100m max + 300m luz)";
+    formatLine(sheet,row,description,distanceInt);
+  } else {
+    var restInt = Math.floor(parseFloat(rest));
+
+    var restFormatted = formatRestTime(restInt);
+
+    var description = repetitionsInt + " x " + distanceInt + " " +  taskType + " " + restFormatted + " z odpuszczeniem"
+    var totalDistance = repetitionsInt * distanceInt;
+
+    formatLine(sheet, row, description, totalDistance);
+  }
+}
+
 function processAEC2Params(repetitions, distance, hardSegment, rest) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var row = PropertiesService.getScriptProperties().getProperty('aec2Row');
@@ -56,6 +82,17 @@ function processAECRegParams(distance, description) {
   var row = PropertiesService.getScriptProperties().getProperty('aecregRow');
 
   var distanceInt = Math.floor(parseFloat(distance));
+
+  var fullDescription = distanceInt + "m - (" + description + ")";
+
+  formatLine(sheet, row, fullDescription, distanceInt);
+}
+
+function processTechnikaParams(distance, description) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('technikaRow');
+
+  var distanceInt = parseInt(distance);
 
   var fullDescription = distanceInt + "m - (" + description + ")";
 

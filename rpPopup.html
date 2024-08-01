@@ -3,14 +3,13 @@
   <head>
     <base target="_top">
     <style>
-      #repetitionsContainer, #distanceContainer, #restContainer {
-        display: none; /* Ukrywa wybierajki na początku */
+      #repetitionsContainer, #distanceContainer, #restContainer, #fesdistanceContainer, #besdpsdistanceContainer, #max100m {
+        display: none; 
       }
     </style>
   </head>
   <body>
-    <label>Siema</label>
-    <br></br>
+    <br><br>
     <form>
       <label for="taskType">Wybierz typ zadania:</label>
       <select id="taskType">
@@ -20,7 +19,7 @@
         <option value="BES + DPS">BES + DPS</option>
         <option value="100m max">100m max</option>
       </select>
-      <br></br>
+      <br><br>
       <div id="distanceContainer">
         <label for="distance">Wybierz dystans:</label>
         <select id="distance">
@@ -29,6 +28,39 @@
           <option value="50m">50m</option>
         </select>
         <br><br>
+      </div>
+      <div id="fesdistanceContainer">
+        <label for="fesSeries">Wybierz ilość serii:</label>
+        <select id="fesSeries">
+          <option value="">--Wybierz ilość serii--</option>
+          <option value=2>2</option>
+          <option value=3>3</option>
+          <option value=4>4</option>
+        </select>
+        <br><br>
+        <label for="FESContains">Treść: (50m FES 1'30" + 100m środek 2'30" + 50m max + 400m dow)</label>
+      </div>
+      <div id="besdpsdistanceContainer">
+        <label for="besdpsSeries">Wybierz ilość serii:</label>
+        <select id="besdpsSeries">
+          <option value="">--Wybierz ilość serii--</option>
+          <option value=1>1</option>
+          <option value=2>2</option>
+          <option value=3>3</option>
+        </select>
+        <br><br>
+        <label for="BESContains">Treść: (10x50m dps 1' + 5x50m BES R20-30" + 250m luz)</label>
+      </div>
+      <div id="max100m">
+        <label for="max100mSeries">Wybierz ilość serii:</label>
+        <select id="max100mSeries">
+          <option value="">--Wybierz ilość serii--</option>
+          <option value=1>1</option>
+          <option value=2>2</option>
+          <option value=3>3</option>
+        </select>
+        <br><br>
+        <label for="Max100mContains">Treść: (4x100m dps R 15-30" plus 1' + 100m max + 300m luz)</label>
       </div>
       <div id="repetitionsContainer">
         <label for="repetitions">Liczba powtórzeń:</label>
@@ -40,8 +72,37 @@
         <select id="rest"></select>
         <br><br>
       </div>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitRPParams()">
     </form>
     <script>
+      function submitRPParams() {
+        var max100mSeries = document.getElementById('max100mSeries').value;
+        var besdpsSeries = document.getElementById('besdpsSeries').value;
+        var fesSeries = document.getElementById('fesSeries').value;
+        var repetitions = document.getElementById('repetitions').value;
+        var distance = document.getElementById('distance').value;
+        var taskType = document.getElementById('taskType').value;
+        var rest = document.getElementById('rest').value;
+        if (taskType === "BES"){
+          google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processRPParams(repetitions, distance, taskType, rest);
+        } else if (taskType === "FES") {
+          google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processRPParams(fesSeries, (fesSeries*600), taskType, 60);
+        } else if (taskType === "BES + DPS"){
+          google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processRPParams(besdpsSeries, (besdpsSeries*1000), taskType, 60);
+        } else if (taskType === "100m max"){
+          google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processRPParams(max100mSeries, (max100mSeries*800), taskType, 60);
+        }
+      }
+
       document.addEventListener("DOMContentLoaded", function() {
         const taskTypeElement = document.getElementById('taskType');
         const distanceSelect = document.getElementById('distance');
@@ -73,10 +134,39 @@
         taskTypeElement.addEventListener('change', function() {
           if (taskTypeElement.value === "BES") {
             distanceContainer.style.display = "block";
-          } else {
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+            fesdistanceContainer.style.display = "none";
+            max100m.style.display = "none";
+            besdpsdistanceContainer.style.display = "none";
+          } else if(taskTypeElement.value === "FES"){
+            fesdistanceContainer.style.display = "block";
+            max100m.style.display = "none";
+            besdpsdistanceContainer.style.display = "none";
             distanceContainer.style.display = "none";
             repetitionsContainer.style.display = "none";
             restContainer.style.display = "none";
+          } else if (taskTypeElement.value === "BES + DPS"){
+            besdpsdistanceContainer.style.display = "block";
+            max100m.style.display = "none";
+            distanceContainer.style.display = "none";
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+            fesdistanceContainer.style.display = "none";
+          } else if(taskTypeElement.value === "100m max"){
+            max100m.style.display = "block";
+            besdpsdistanceContainer.style.display = "none";
+            distanceContainer.style.display = "none";
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+            fesdistanceContainer.style.display = "none";
+          } else {
+            max100m.style.display = "none";
+            besdpsdistanceContainer.style.display = "none";
+            distanceContainer.style.display = "none";
+            repetitionsContainer.style.display = "none";
+            restContainer.style.display = "none";
+            fesdistanceContainer.style.display = "none";
           }
         });
 
