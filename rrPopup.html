@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <form>
+      <label for="series">Liczba serii:</label>
+      <select id="series"></select>
+      <br><br>
+      <label for="repetitions">Liczba powtórzeń w serii:</label>
+      <select id="repetitions"></select>
+      <br><br>
+      <label for="distance">Dystans:</label>
+      <select id="distance">
+        <option value=25>25m</option>
+        <option value=50>50m</option>
+        <option value=75>75m</option>
+        <option value=100>100m</option>
+        <option value=125>125m</option>
+        <option value=150>150m</option>
+        <option value=200>200m</option>
+        <option value=250>250m</option>
+        <option value=300>300m</option>
+        <option value=350>350m</option>
+        <option value=400>400m</option>
+      </select>
+      <br><br>
+      <label for="rest">Przerwa: </label>
+      <select id="rest"></select>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitRRParams()">
+    </form>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const seriesSelect = document.getElementById('series');
+        const repetitionsSelect = document.getElementById('repetitions');
+        const restSelect = document.getElementById('rest');
+        const distanceSelect = document.getElementById('distance');
+
+        for (let i = 1; i <= 10; i++) {
+          let option = document.createElement('option');
+          option.value = option.text = i;
+          seriesSelect.appendChild(option.cloneNode(true));
+          repetitionsSelect.appendChild(option);
+        }
+
+        const restIncrement = 15;
+        const maxRestValue = 600;
+        
+        for (let value = 15; value <= maxRestValue; value += restIncrement) {
+          let minutes = Math.floor(value / 60);
+          let seconds = value % 60;
+          let text = minutes > 0 ? `${minutes}'${seconds < 10 ? '0' : ''}${seconds}"` : `${seconds}"`;
+          
+          let option = document.createElement('option');
+          option.value = value;
+          option.text = text;
+          restSelect.appendChild(option);
+        }
+      });
+
+      function submitRRParams() {
+        var series = document.getElementById('series').value;
+        var repetitions = document.getElementById('repetitions').value;
+        var distance = document.getElementById('distance').value;
+        var rest = document.getElementById('rest').value;
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processRRParams(series, repetitions, distance, rest);
+      }
+    </script>
+  </body>
+</html>

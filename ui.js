@@ -88,3 +88,10 @@ function showTechnikaPopup() {
       .setHeight(400);
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania Technicznego');
 }
+
+function showRRPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('rrPopup')
+      .setWidth(500)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania na rękach');
+}

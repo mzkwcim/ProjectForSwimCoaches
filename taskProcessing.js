@@ -77,6 +77,24 @@ function processAEC3Params(task, rest) {
   formatLine(sheet, row, description, 300);
 }
 
+function processRRParams(series, repetitions, distance, rest){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('rrRow');
+
+  var seriesInt = Math.floor(parseFloat(series));
+  var repetitionsInt = Math.floor(parseFloat(repetitions));
+  var distanceInt = Math.floor(parseFloat(distance));
+  var restInt = Math.floor(parseFloat(rest));
+
+  var restFormatted = formatRestTime(restInt);
+
+  var description = seriesInt + " x " + repetitionsInt + " x " + distanceInt + "m, " + restFormatted;
+  var totalDistance = seriesInt * repetitionsInt * distanceInt;
+
+  formatLine(sheet, row, description, totalDistance);
+
+}
+
 function processAECRegParams(distance, description) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var row = PropertiesService.getScriptProperties().getProperty('aecregRow');

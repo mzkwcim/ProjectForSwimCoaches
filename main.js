@@ -87,6 +87,9 @@ function onEdit(e) {
     } else if (value === "Technika"){
       PropertiesService.getScriptProperties().setProperty('technikaRow', range.getRow());
       showTechnikaPopup();
+    } else if (value === "RR"){
+      PropertiesService.getScriptProperties().setProperty('rrRow', range.getRow());
+      showRRPopup();
     } else if (value === "Reset") {
       resetRow(range.getRow());
     }
