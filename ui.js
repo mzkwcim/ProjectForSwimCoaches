@@ -1,7 +1,7 @@
 function showTrainingPartsDialog() {
   var html = HtmlService.createHtmlOutputFromFile('index')
       .setWidth(500)
-      .setHeight(400);
+      .setHeight(500);
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz części treningu');
 }
 
@@ -86,7 +86,7 @@ function showTechnikaPopup() {
   var html = HtmlService.createHtmlOutputFromFile('technikaPopup')
       .setWidth(500)
       .setHeight(400);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania Technicznego');
+  SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 
 function showRRPopup() {
@@ -94,4 +94,24 @@ function showRRPopup() {
       .setWidth(500)
       .setHeight(400);
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania na rękach');
+}
+
+function showZmiennyPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('zmiennyPopup')
+      .setWidth(900)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania do zmiennego');
+}
+
+function showConfirmationDialog() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Potwierdzenie', 'Czy na pewno chcesz wygenerować tabelę?', ui.ButtonSet.YES_NO);
+  if (response == ui.Button.YES) {
+    generateTable();
+  }
+}
+
+function showErrorMessage(message) {
+  var ui = SpreadsheetApp.getUi();
+  ui.alert('Błąd', message, ui.ButtonSet.OK);
 }

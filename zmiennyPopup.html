@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      #t400t200, #eachStyle {
+        display: none; 
+      }
+    </style>
+  </head>
+  <body>
+    <label>Wybierz typ zadania: </label>
+    <form>
+      <select id="taskType">
+        <option value="80x25m 1-4 ćw 1 max">80x25m 1-4 ćw 1 max</option>
+        <option value="4x50m T400m + 200m ćw + 8x25m T200m + 100m ćw + 100m zm max">4x50m T400m + 200m ćw + 8x25m T200m + 100m ćw + 100m zm max</option>
+        <option value="50m do zm rozp + 100m ćw/T200/400m/50m - w serii do każdego stylu układ">50m do zm rozp + 100m ćw/T200/400m/50m - w serii do każdego stylu układ</option>
+        <option value="3x75m d/g/kl kazde 1/2/3 + 200m kr dps/T200 150/50 + 3x75m d/g/kl 1/2/3 + 200m NN kr 3x75m d/g/kl 1/2/3 + 8x100m kr NN/kr Nnmax">3x75m d/g/kl kazde 1/2/3 + 200m kr dps/T200 150/50 + 3x75m d/g/kl 1/2/3 + 200m NN kr 3x75m d/g/kl 1/2/3 + 8x100m kr NN/kr Nnmax</option>
+        <option value="2x100m zm+100m kr+3x100m zm+100m kr+4x100m zm+100m kr+3x100m zm+100m kr+2x100m zm+100m kr+100m zm max!!!">2x100m zm+100m kr+3x100m zm+100m kr+4x100m zm+100m kr+3x100m zm+100m kr+2x100m zm+100m kr+100m zm max!!!</option>
+        <option value="3x15x50m 1. NN 2. ćw 3.max 1. klas 2. kr lub grzb 3. klas + 8x50m ćw/ zm ">3x15x50m 1. NN 2. ćw 3.max 1. klas 2. kr lub grzb 3. klas + 8x50m ćw/ zm </option>
+        <option value="40x50m 1-3 ćw 4. 25mNN/25m rozp 5. max do kazdego stylu">40x50m 1-3 ćw 4. 25mNN/25m rozp 5. max do kazdego stylu</option>
+        <option value="20x100m 1-3. gzrb dps 4. max grzb 5. klas dps">20x100m 1-3. gzrb dps 4. max grzb 5. klas dps</option>
+      </select>
+      <br></br>
+      <div id="t400t200">
+        <select id="t400t200Series">
+          <option value=2>2</option>
+          <option value=3>3</option>
+          <option value=4>4</option>
+          <option value=5>5</option>
+        </select>
+      </div>
+      <div id="eachStyle">
+        <select id="eachStyleSeries">
+          <option value=2>2</option>
+          <option value=3>3</option>
+          <option value=4>4</option>
+          <option value=5>5</option>
+          <option value=6>6</option>
+        </select>
+      </div>
+      <br></br>
+      <input type="button" value="Zatwierdź" onclick="submitZmiennyParams()">
+      <script>
+        function submitZmiennyParams(){
+          var taskType = document.getElementById('taskType').value;
+          var t400t200Series = document.getElementById('t400t200Series').value;
+          var eachStyleSeries = document.getElementById('eachStyleSeries').value;
+          if (taskType === "80x25m 1-4 ćw 1 max"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(80, 2000, taskType, 15);
+          } else if (taskType === "4x50m T400m + 200m ćw + 8x25m T200m + 100m ćw + 100m zm max"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(t400t200Series, t400t200Series*800, taskType, 15);
+          } else if (taskType === "50m do zm rozp + 100m ćw/T200/400m/50m - w serii do każdego stylu układ"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(eachStyleSeries, 600*eachStyleSeries, taskType, 15);
+          } else if (taskType === "3x75m d/g/kl kazde 1/2/3 + 200m kr dps/T200 150/50 + 3x75m d/g/kl 1/2/3 + 200m NN kr 3x75m d/g/kl 1/2/3 + 8x100m kr NN/kr Nnmax"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(1, 1250, taskType, 15);
+          } else if (taskType === "2x100m zm+100m kr+3x100m zm+100m kr+4x100m zm+100m kr+3x100m zm+100m kr+2x100m zm+100m kr+100m zm max!!!"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(1, 2000, taskType, 15);
+          } else if (taskType === "3x15x50m 1. NN 2. ćw 3.max 1. klas 2. kr lub grzb 3. klas + 8x50m ćw/ zm "){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(1, 2250, taskType, 15);
+          } else if (taskType === "40x50m 1-3 ćw 4. 25mNN/25m rozp 5. max do kazdego stylu"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(1, 2000, taskType, 15);
+          } else if (taskType === "20x100m 1-3. gzrb dps 4. max grzb 5. klas dps"){
+            google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .processZmiennyParams(1, 2000, taskType, 15);
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+          const taskTypeElement = document.getElementById('taskType');
+          const t400t200 = document.getElementById('t400t200');
+          const eachStyle = document.getElementById('eachStyle');
+          
+          taskTypeElement.addEventListener('change', function() {
+            if (taskTypeElement.value === "4x50m T400m + 200m ćw + 8x25m T200m + 100m ćw + 100m zm max"){
+              t400t200.style.display = 'block';
+              eachStyle.style.display = 'none';
+            } else if (taskTypeElement.value === "50m do zm rozp + 100m ćw/T200/400m/50m - w serii do każdego stylu układ"){
+              t400t200.style.display = 'none';
+              eachStyle.style.display = 'block';
+            } else {
+              t400t200.style.display = 'none';
+              eachStyle.style.display = 'none';
+            }
+          });
+        });
+      </script>
+    </form>
+  </body>
+</html>

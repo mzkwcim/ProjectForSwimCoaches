@@ -1,3 +1,5 @@
+var isPopupDisplayed = false;
+
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Niestandardowe menu')
@@ -23,7 +25,7 @@ function addSelectedPartsToTable(selectedParts) {
     sheet.getRange(row + 1, 1).setValue(selectedParts[row - 1]);
     var typeCell = sheet.getRange(row + 1, 4);
     var typeRule = SpreadsheetApp.newDataValidation()
-        .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
+        .requireValueInList(['AEC reg', 'AEC1', 'AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP','Zadanie do zmiennego', 'Sprint', 'Technika', 'NN', 'RR', 'Reset'])
         .setAllowInvalid(false)
         .build();
     typeCell.setDataValidation(typeRule);
@@ -39,6 +41,16 @@ function addSelectedPartsToTable(selectedParts) {
       .setAllowInvalid(false)
       .build();
   editCell.setDataValidation(editRule);
+
+  var generateTableTextCell = sheet.getRange(lastRow + 2, 4);
+  generateTableTextCell.setValue('Generuj tabelę zadania');
+
+  var generateTableCell = sheet.getRange(lastRow + 3, 4);
+  var generateTableRule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(['Generuj tabelę'])
+      .setAllowInvalid(false)
+      .build();
+  generateTableCell.setDataValidation(generateTableRule);
 
   for (var col = 1; col <= numCols; col++) {
     setColumnWidth(sheet, col);
@@ -90,8 +102,17 @@ function onEdit(e) {
     } else if (value === "RR"){
       PropertiesService.getScriptProperties().setProperty('rrRow', range.getRow());
       showRRPopup();
+    } else if (value === "AEC1"){
+      PropertiesService.getScriptProperties().setProperty('aec1Row', range.getRow());
+      showAEC1Popup();
+    } else if (value === "Zadanie do zmiennego"){
+      PropertiesService.getScriptProperties().setProperty('zmiennyRow', range.getRow());
+      showZmiennyPopup();
     } else if (value === "Reset") {
       resetRow(range.getRow());
+    } else if (value === 'Generuj tabelę') {
+      handleGenerateTable(e);
+      range.setValue('');  // Set the cell value to empty
     }
   }
 
@@ -103,6 +124,35 @@ function onEdit(e) {
     }
     range.setValue('');
   }
+}
+
+function handleGenerateTable(e) {
+  var sheet = e.source.getActiveSheet();
+  var mainTaskRow = findMainTaskRow(sheet);
+  if (mainTaskRow !== -1) {
+    var taskType = sheet.getRange(mainTaskRow, 4).getValue().trim();
+    if (taskType === 'ANC') {
+      showConfirmationDialog();
+    } else {
+      showErrorMessage('Opcja Generuj tabelę jest dostępna tylko dla treningów z zadaniami ANC.');
+    }
+  } else {
+    showErrorMessage('Nie znaleziono wiersza z Zadaniem głównym.');
+  }
+}
+
+function findMainTaskRow(sheet) {
+  var data = sheet.getDataRange().getValues();
+  for (var i = 0; i < data.length; i++) {
+    if (data[i][0].trim() === 'Zadanie Główne') {
+      return i + 1;  // Row number in sheet (1-based index)
+    }
+  }
+  return -1;
+}
+
+function generateTable() {
+  // Implement logic for generating the table here
 }
 
 function forceAuth() {

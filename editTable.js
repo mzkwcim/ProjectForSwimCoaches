@@ -16,7 +16,7 @@ function processNewRow(trainingPart, rowNumber) {
 
   var typeCell = sheet.getRange(newRowNum, 4);
   var typeRule = SpreadsheetApp.newDataValidation()
-      .requireValueInList(['AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP', 'Sprint', 'Technika', 'NN', 'RR', 'AEC reg', 'Reset'])
+      .requireValueInList(['AEC reg', 'AEC1', 'AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP','Zadanie do zmiennego', 'Sprint', 'Technika', 'NN', 'RR', 'Reset'])
       .setAllowInvalid(false)
       .build();
   typeCell.setDataValidation(typeRule);
@@ -64,7 +64,7 @@ function updateBorders(sheet) {
     sheet.getRange(1, col, numRows, 1).setBorder(null, null, null, true, null, null, "black", SpreadsheetApp.BorderStyle.SOLID);
   }
 
-  sheet.getRange(1, 1, 1, numCols).setBorder(true, true, true, true, false, false, "black", SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+  sheet.getRange(1, 1, 1, numCols).setBorder(true, true, true, true, true, true, "black", SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
 }
 
 function setColumnWidth(sheet, col) {

@@ -45,23 +45,29 @@ function processRPParams(repetitions, distance, taskType, rest){
   }
 }
 
-function processAEC2Params(repetitions, distance, hardSegment, rest) {
+function processZmiennyParams(repetitions, distance, taskType, rest){
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var row = PropertiesService.getScriptProperties().getProperty('aec2Row');
-
+  var row = PropertiesService.getScriptProperties().getProperty('zmiennyRow');
   var repetitionsInt = Math.floor(parseFloat(repetitions));
   var distanceInt = Math.floor(parseFloat(distance));
-  var hardSegmentInt = Math.floor(parseFloat(hardSegment));
-  var restInt = Math.floor(parseFloat(rest));
+  if (taskType === "4x50m T400m + 200m ćw + 8x25m T200m + 100m ćw + 100m zm max"){
+    var description = repetitionsInt + " x ( " + taskType + " )";
+    formatLine(sheet, row, description, distanceInt);
+  } else if (taskType === "50m do zm rozp + 100m ćw/T200/400m/50m - w serii do każdego stylu układ"){
+    var description = repetitionsInt + " x ( " + taskType + " )";
+    formatLine(sheet, row, description, distanceInt);
+  } else {
+    formatLine(sheet, row, taskType, distanceInt);
+  }
+}
 
-  var easySegmentInt = distanceInt - hardSegmentInt;
+function processAEC2Params(description, distance) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('aec2Row');
+  var distanceInt = Math.floor(parseFloat(distance));
+  var finaldescription = distanceInt + " - ( " + description + " )";
 
-  var restFormatted = formatRestTime(restInt);
-
-  var description = repetitionsInt + " x " + distanceInt + "m (" + hardSegmentInt + "m mocno + " + easySegmentInt + "m spokojnie), " + restFormatted;
-  var totalDistance = repetitionsInt * distanceInt;
-
-  formatLine(sheet, row, description, totalDistance);
+  formatLine(sheet, row, finaldescription, distanceInt);
 }
 
 function processAEC3Params(task, rest) {

@@ -6,67 +6,24 @@
   <body>
     <h2>Wybierz parametry zadania AEC2</h2>
     <form>
-      <label for="repetitions">Liczba powtórzeń:</label>
-      <select id="repetitions"></select>
+      <label for="distance">Wprowadź łączny dystans: </label>
+      <input type="number" id="distance" min="25" max="10000" step="25" required>
       <br><br>
-      <label for="distance">Dystans:</label>
-      <select id="distance">
-        <option value="75">75m</option>
-        <option value="175">175m</option>
-        <option value="200">200m</option>
-        <option value="225">225m</option>
-        <option value="250">250m</option>
-        <option value="300">300m</option>
-      </select>
-      <br><br>
-      <label for="hardSegment">Długość odcinka pływanego mocno:</label>
-      <select id="hardSegment">
-        <option value="25">25m</option>
-        <option value="50">50m</option>
-        <option value="75">75m</option>
-        <option value="100">100m</option>
-      </select>
-      <br><br>
-      <label for="rest">Przerwa:</label>
-      <select id="rest"></select>
-      <br><br>
+      <label for="description">Wprowadź opis zadania: </label>
+      <br></br>
+      <textarea id="description" rows="4" cols="50" required></textarea>
+      <br></br>
       <input type="button" value="Zatwierdź" onclick="submitAEC2Params()">
     </form>
     <script>
       function submitAEC2Params() {
-        var repetitions = document.getElementById('repetitions').value;
+        var description = document.getElementById('description').value;
         var distance = document.getElementById('distance').value;
-        var hardSegment = document.getElementById('hardSegment').value;
-        var rest = document.getElementById('rest').value;
         google.script.run
           .withSuccessHandler(() => google.script.host.close())
-          .processAEC2Params(repetitions, distance, hardSegment, rest);
+          .processAEC2Params(description, distance);
       }
-      document.addEventListener("DOMContentLoaded", function() {
-        const selectElement = document.getElementById('repetitions');
-        const restSelect = document.getElementById('rest');
-            
-        for (let i = 1; i <= 20; i++) {
-            let option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            selectElement.appendChild(option);
-        }
 
-        const restIncrement = 15;
-        const maxRestValue = 600;
-            
-        for (let value = 15; value <= maxRestValue; value += restIncrement) {
-          let minutes = Math.floor(value / 60);
-          let seconds = value % 60;
-          let text = minutes > 0 ? `${minutes}'${seconds < 10 ? '0' : ''}${seconds}"` : `${seconds}"`;
-                
-          let option = document.createElement('option');
-          option.value = value;
-          option.text = text;
-          restSelect.appendChild(option);
-        }
-      });
     </script>
   </body>
 </html>
