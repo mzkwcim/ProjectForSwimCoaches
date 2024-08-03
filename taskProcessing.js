@@ -204,3 +204,138 @@ function formatLine(sheet, row, description, totalDistance){
     sheet.getRange(parseInt(row), 4).setVerticalAlignment("middle").setHorizontalAlignment("center");
 }
 
+function processGenerateTable() {
+  var targetSpreadsheetId = '1nO8BdJ1UuSdwd9qh2JCf7p0Zcpjy9FVfob819H7pLNk';
+  var presenceSpreadsheetId = '1BC8yBaTPrlouJfa6IFDhNkHuE42v_27ikEljHijBAEk';
+  var targetSpreadsheet = SpreadsheetApp.openById(targetSpreadsheetId);
+  var presenceSpreadsheet = SpreadsheetApp.openById(presenceSpreadsheetId);
+
+  var today = new Date();
+  var yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  var formattedDate = Utilities.formatDate(yesterday, Session.getScriptTimeZone(), 'dd.MM.yyyy');
+  var trainingDate = Utilities.formatDate(yesterday, Session.getScriptTimeZone(), 'dd-MM-yyyy');
+  var sheetName = 'zadanie ANC ' + formattedDate;
+
+  var newSheet = targetSpreadsheet.insertSheet(sheetName);
+  if (!newSheet) {
+    newSheet = targetSpreadsheet.getSheetByName(sheetName);
+    newSheet.clear();
+  }
+
+  // Znalezienie głównego zadania i pobranie liczby serii oraz powtórzeń
+  var sourceSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var mainTaskRow = findMainTaskRow(sourceSheet);
+  var taskDescription = sourceSheet.getRange(mainTaskRow, 2).getValue();
+
+  // Wyciągnięcie liczby serii i powtórzeń z opisu zadania
+  var series = parseInt(taskDescription.match(/(\d+) x/)[1], 10);
+  var repeats = parseInt(taskDescription.match(/x (\d+)/)[1], 10);
+
+  // Szukanie arkusza obecności, który zawiera wczorajszą datę
+  var presenceSheets = presenceSpreadsheet.getSheets();
+  var presenceSheet = null;
+  Logger.log('Yesterday: ' + yesterday);
+  for (var i = 0; i < presenceSheets.length; i++) {
+    var sheetName = presenceSheets[i].getName();
+    Logger.log('Checking sheet: ' + sheetName);
+    var dateRange = sheetName.match(/(\d{2}\.\d{2}\.\d{4})-(\d{2}\.\d{2}\.\d{4})/);
+    if (dateRange) {
+      Logger.log('Date range found: ' + dateRange);
+      var startDate = parseDate(dateRange[1]);
+      var endDate = parseDate(dateRange[2]);
+      Logger.log('Start date: ' + startDate + ', End date: ' + endDate);
+      if (yesterday >= startDate && yesterday <= endDate) {
+        presenceSheet = presenceSheets[i];
+        break;
+      }
+    }
+  }
+
+  if (!presenceSheet) {
+    showErrorMessage('Nie znaleziono odpowiedniego arkusza z obecnością.');
+    return;
+  }
+
+  // Przykladowa lista zawodników
+  var players = getPlayersForTraining(presenceSheet, yesterday);
+
+  if (players.length === 0) {
+    showErrorMessage('Brak zawodników na treningu.');
+    return;
+  }
+
+  // Wypełnianie tabeli
+  var startRow = 2;
+
+  for (var i = 0; i < players.length; i++) {
+    var endRow = startRow + repeats - 1;
+    newSheet.getRange(startRow, 1, repeats, 1).merge().setValue(players[i]).setVerticalAlignment("middle").setHorizontalAlignment("center");
+    startRow = endRow + 1;
+  }
+
+  for (var k = 0; k < repeats; k++) {
+    newSheet.getRange(1, k + 2).setValue("Seria " + (k + 1));
+  }
+
+  var range = newSheet.getRange(1, 1, startRow - 1, repeats + 1);
+  range.setBorder(true, true, true, true, true, true);
+
+  // Ukrywanie innych arkuszy
+  var sheets = targetSpreadsheet.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].getSheetName() !== sheetName) {
+      sheets[i].hideSheet();
+    }
+  }
+}
+
+function parseDate(dateString) {
+  var parts = dateString.split('.');
+  return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+function getPlayersForTraining(presenceSheet, date) {
+  var players = [];
+  var data = presenceSheet.getDataRange().getValues();
+  
+  // Pobieranie dnia tygodnia i pory dnia
+  var days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+  var dayOfWeek = days[date.getDay()];
+  var isMorning = date.getHours() < 12;
+  var trainingTime = isMorning ? 'rano' : 'po południu';
+  var trainingDate = dayOfWeek + ' ' + trainingTime;
+
+  // Szukanie kolumny z odpowiednią datą treningu
+  var headers = data[0];
+  var trainingColumn = -1;
+  Logger.log('Training date: ' + trainingDate);
+  for (var i = 0; i < headers.length; i++) {
+    Logger.log('Checking header: ' + headers[i]);
+    if (headers[i].includes(trainingDate)) {
+      trainingColumn = i;
+      Logger.log('Found matching column at index: ' + i);
+      break;
+    }
+  }
+
+  if (trainingColumn === -1) {
+    Logger.log('No matching column found for date: ' + trainingDate);
+    return players;
+  }
+
+  // Pobranie listy zawodników obecnych na treningu
+  for (var i = 1; i < data.length; i++) {
+    Logger.log('Checking row: ' + (i + 1) + ' value: ' + data[i][trainingColumn]);
+    if (data[i][trainingColumn] === 1) {
+      players.push(data[i][0]);
+    }
+  }
+
+  return players;
+}
+
+function forceAuth() {
+  var ui = SpreadsheetApp.getUi();
+  ui.alert('Autoryzacja zakończona sukcesem!');
+}

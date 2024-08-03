@@ -107,7 +107,7 @@ function showConfirmationDialog() {
   var ui = SpreadsheetApp.getUi();
   var response = ui.alert('Potwierdzenie', 'Czy na pewno chcesz wygenerować tabelę?', ui.ButtonSet.YES_NO);
   if (response == ui.Button.YES) {
-    generateTable();
+    processGenerateTable();
   }
 }
 
