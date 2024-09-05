@@ -70,6 +70,15 @@ function processAEC2Params(description, distance) {
   formatLine(sheet, row, finaldescription, distanceInt);
 }
 
+function processAEC1Params(description, distance) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('aec1Row');
+  var distanceInt = Math.floor(parseFloat(distance));
+  var finaldescription = distanceInt + " - ( " + description + " )";
+
+  formatLine(sheet, row, finaldescription, distanceInt);
+}
+
 function processAEC3Params(task, rest) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var row = PropertiesService.getScriptProperties().getProperty('aec3Row');

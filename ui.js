@@ -19,6 +19,13 @@ function showAEC2Popup() {
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania AEC2');
 }
 
+function showAEC1Popup() {
+  var html = HtmlService.createHtmlOutputFromFile('aec1Popup')
+      .setWidth(400)
+      .setHeight(300);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania AEC1');
+}
+
 function showAEC3Popup() {
   var html = HtmlService.createHtmlOutputFromFile('aec3Popup')
       .setWidth(400)

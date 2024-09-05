@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Wybierz parametry zadania AEC1</h2>
+    <form>
+      <label for="distance">Wprowadź łączny dystans: </label>
+      <input type="number" id="distance" min="25" max="10000" step="25" required>
+      <br><br>
+      <label for="description">Wprowadź opis zadania: </label>
+      <br></br>
+      <textarea id="description" rows="4" cols="50" required></textarea>
+      <br></br>
+      <input type="button" value="Zatwierdź" onclick="submitAEC1Params()">
+    </form>
+    <script>
+      function submitAEC1Params() {
+        var description = document.getElementById('description').value;
+        var distance = document.getElementById('distance').value;
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processAEC1Params(description, distance);
+      }
+
+    </script>
+  </body>
+</html>
