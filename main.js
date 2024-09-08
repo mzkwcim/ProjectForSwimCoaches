@@ -25,7 +25,7 @@ function addSelectedPartsToTable(selectedParts) {
     sheet.getRange(row + 1, 1).setValue(selectedParts[row - 1]);
     var typeCell = sheet.getRange(row + 1, 4);
     var typeRule = SpreadsheetApp.newDataValidation()
-        .requireValueInList(['AEC reg', 'AEC1', 'AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP','Zadanie do zmiennego', 'Sprint', 'Technika', 'NN', 'RR', 'Reset'])
+        .requireValueInList(['AEC reg', 'AEC1', 'AEC2', 'AEC3', 'ANC', 'AEP', 'ANP','RP','Zadanie do zmiennego', 'Sprint', 'Technika', 'NN', 'RR', 'Reset', 'Zadanie do delfina'])
         .setAllowInvalid(false)
         .build();
     typeCell.setDataValidation(typeRule);
@@ -108,6 +108,9 @@ function onEdit(e) {
     } else if (value === "Zadanie do zmiennego"){
       PropertiesService.getScriptProperties().setProperty('zmiennyRow', range.getRow());
       showZmiennyPopup();
+    } else if (value === "Zadanie do delfina"){
+      PropertiesService.getScriptProperties().setProperty('delfinRow', range.getRow());
+      showDelfinPopup();
     } else if (value === "Reset") {
       resetRow(range.getRow());
     } else if (value === 'Generuj tabelę') {

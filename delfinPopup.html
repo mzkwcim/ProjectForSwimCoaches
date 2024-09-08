@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Wybierz parametry zadania Delfin</h2>
+    <form id="delfinForm">
+      <label for="series">Liczba serii:</label>
+      <select id="series" onchange="updateSeriesFields()"></select>
+      <br><br>
+      <label for="defaultRepetitions">Domyślna liczba powtórzeń w serii:</label>
+      <select id="defaultRepetitions" onchange="updateSeriesFields()"></select>
+      <br><br>
+      <div id="seriesFields"></div>
+      <br><br>
+      <input type="button" value="Zatwierdź" onclick="submitDelfinParams()">
+    </form>
+
+    <script>
+      // Funkcja do aktualizacji pól dla serii
+      function updateSeriesFields() {
+        var seriesCount = document.getElementById('series').value;
+        var defaultRepetitions = document.getElementById('defaultRepetitions').value;
+        var seriesFieldsDiv = document.getElementById('seriesFields');
+        seriesFieldsDiv.innerHTML = '';
+
+        // Tworzenie pól dla każdej serii
+        for (var i = 1; i <= seriesCount; i++) {
+          var repetitionsOptions = '';
+          
+          // Dynamiczne tworzenie opcji dla liczby powtórzeń
+          for (var j = 1; j <= 40; j++) {
+            repetitionsOptions += `<option value="${j}" ${defaultRepetitions == j ? 'selected' : ''}>${j}</option>`;
+          }
+
+          // Tworzenie dynamicznych pól dla serii
+          var seriesField = document.createElement('div');
+          seriesField.innerHTML = `
+            <label for="repetitions${i}">Seria ${i} - Liczba powtórzeń:</label>
+            <select id="repetitions${i}">
+              ${repetitionsOptions}
+            </select>
+            <label for="distance${i}">Dystans:</label>
+            <select id="distance${i}">
+              <option value="25">25m</option>
+              <option value="50">50m</option>
+              <option value="75">75m</option>
+              <option value="100">100m</option>
+              <option value="125">125m</option>
+              <option value="150">150m</option>
+              <option value="175">175m</option>
+              <option value="200">200m</option>
+            </select>
+            <label for="rest${i}">Przerwa:</label>
+            <select id="rest${i}">
+              <option value="15">15"</option>
+              <option value="30">30"</option>
+              <option value="45">45"</option>
+              <option value="60">1'</option>
+              <option value="75">1'15"</option>
+              <option value="90">1'30"</option>
+              <option value="105">1'45"</option>
+              <option value="120">2'</option>
+              <option value="135">2'15"</option>
+              <option value="150">2'30"</option>
+              <option value="165">2'45"</option>
+              <option value="180">3'</option>
+              <option value="195">3'15"</option>
+              <option value="210">3'30"</option>
+              <option value="225">3'45"</option>
+              <option value="240">4'</option>
+              <option value="255">4'15"</option>
+              <option value="270">4'30"</option>
+              <option value="285">4'45"</option>
+              <option value="300">5'</option>
+            </select>
+            <br><br>
+          `;
+          seriesFieldsDiv.appendChild(seriesField);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const seriesSelect = document.getElementById('series');
+        const repetitionsSelect = document.getElementById('defaultRepetitions');
+
+        // Dodanie opcji dla liczby serii i powtórzeń (1-10)
+        for (let i = 1; i <= 10; i++) {
+          let option = document.createElement('option');
+          option.value = option.text = i;
+          seriesSelect.appendChild(option.cloneNode(true));
+          repetitionsSelect.appendChild(option);
+        }
+      });
+
+      // Funkcja do zatwierdzania parametrów
+      function submitDelfinParams() {
+        var seriesCount = parseInt(document.getElementById('series').value);
+        var totalDistance = 0; // Zmienna na sumę dystansów
+        if (seriesCount === 1){
+          var taskDescription = `${seriesCount} seria\n`; // Opis zadania
+        } else if (seriesCount === 2 || seriesCount === 3 || seriesCount === 4){
+          var taskDescription = `${seriesCount} serie\n`; // Opis zadania
+        } if (seriesCount > 4){
+          var taskDescription = `${seriesCount} serii\n`; // Opis zadania
+        }
+        // Zbieranie parametrów dla każdej serii
+        for (var i = 1; i <= seriesCount; i++) {
+          var repetitions = document.getElementById(`repetitions${i}`).value;
+          var distance = document.getElementById(`distance${i}`).value;
+          var rest = document.getElementById(`rest${i}`).value;
+
+          // Zliczanie całkowitego dystansu
+          totalDistance += repetitions * distance;
+
+          // Konwersja przerwy na format minutowo-sekundowy
+          var restMinutes = Math.floor(rest / 60);
+          var restSeconds = rest % 60;
+          var restFormatted = restMinutes > 0 ? `${restMinutes}'${restSeconds < 10 ? '0' : ''}${restSeconds}"` : `${restSeconds}s`;
+
+          // Budowanie opisu zadania
+          taskDescription += `${i}) ${repetitions}x${distance}m ${restFormatted}\n`;
+
+          // Dodawanie przecinka po każdej serii, oprócz ostatniej
+          if (i < seriesCount) {
+            taskDescription += ", ";
+          }
+        }
+
+        // Przekazywanie danych do Google Apps Script
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close())
+          .processDelfinParams(taskDescription, totalDistance);
+      }
+
+      // Inicjalizacja pól przy załadowaniu strony
+      window.onload = updateSeriesFields;
+    </script>
+  </body>
+</html>

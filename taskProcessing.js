@@ -19,6 +19,15 @@ function processANCParams(series, repetitions, distance, rest) {
   formatLine(sheet, row, description, totalDistance);
 }
 
+function processDelfinParams(taskDescription, totalDistance){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var row = PropertiesService.getScriptProperties().getProperty('delfinRow');
+
+  var distance = Math.floor(parseFloat(totalDistance));
+
+  formatLine(sheet, row, taskDescription, distance);
+}
+
 function processRPParams(repetitions, distance, taskType, rest){
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var row = PropertiesService.getScriptProperties().getProperty('rpRow');

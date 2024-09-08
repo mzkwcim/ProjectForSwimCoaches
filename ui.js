@@ -110,6 +110,13 @@ function showZmiennyPopup() {
   SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania do zmiennego');
 }
 
+function showDelfinPopup() {
+  var html = HtmlService.createHtmlOutputFromFile('delfinPopup')
+      .setWidth(900)
+      .setHeight(400);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Wybierz parametry zadania do delfina');
+}
+
 function showConfirmationDialog() {
   var ui = SpreadsheetApp.getUi();
   var response = ui.alert('Potwierdzenie', 'Czy na pewno chcesz wygenerować tabelę?', ui.ButtonSet.YES_NO);
