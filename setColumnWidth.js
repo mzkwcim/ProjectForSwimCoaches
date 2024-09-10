@@ -14,7 +14,7 @@ function setColumnWidth(sheet, col) {
     }
   }
 
-  var baseWidth = fontSize * 0.75;
+  var baseWidth = fontSize * 0.85;
   if (fontWeight === 'bold') {
     baseWidth *= 1.1;
   }

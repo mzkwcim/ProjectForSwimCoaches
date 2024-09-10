@@ -17,7 +17,14 @@ function createWeeklyAndYearlySummaryForAthletes() {
   // Lista znajomych (mapping)
   var friends = [
     {email: 'jzalxx1@gmail.com', name: 'Zalewski Jacek'},
-    {email: 'wiktoria.kolanczyk@gmail.com', name: 'Kolanczyk Wiktoria'}
+    {email: 'wiktoria.kolanczyk@gmail.com', name: 'Kolanczyk Wiktoria'},
+    {email: 'Maciekjedwabny1@gmail.com', name: 'Jedwabny Maciej'},
+    {email: 'Alicjanogaj1@gmail.com', name: 'Nogaj Alicja'},
+    {email: 'marcel.burzak@gmail.com', name: 'Burzak Marcel'},
+    {email: 'majakordalska1@gmail.com', name: 'Kordalska Maja'},
+    {email: 'kajkokrucki@gmail.com', name: 'Krucki Kajetan'},
+    {email: 'zygnarowskamichalina@gmail.com', name: 'Zygnarowska Michalina'},
+    {email: 'krzesniak.kuba@gmail.com', name: 'Krześniak Jakub'}
   ];
   Logger.log("Załadowano listę znajomych: " + JSON.stringify(friends));
 
@@ -179,7 +186,7 @@ function createWeeklyAndYearlySummaryForAthletes() {
     var spreadsheet = updateWeeklySheet(athleteName, folder, week, totalDistance, presencePercent, warmupPercent, taskTypeDistances, taskTypePercentages, mainTaskTypes, mainTaskWarmupCount, friend);
     
     // **Aktualizacja rocznego arkusza**
-    updateYearlySheet(spreadsheet, presencePercent, warmupPercent, taskTypePercentages, athleteName, folder, totalDistance, taskTypeDistances, mainTaskTypes, mainTaskWarmupCount);
+    //updateYearlySheet(spreadsheet, presencePercent, warmupPercent, taskTypePercentages, athleteName, folder, totalDistance, taskTypeDistances, mainTaskTypes, mainTaskWarmupCount);
 
     // Resetowanie wartości po przetworzeniu zawodnika
     totalDistance = 0;
@@ -191,6 +198,13 @@ function createWeeklyAndYearlySummaryForAthletes() {
   }
 
   Logger.log("Zakończono działanie skryptu");
+
+  var recipient = "wkrak98@gmail.com";
+  var subject = "Podsumowanie tygodnia";
+  var body = "Cześć, \n\nTygodniowe podsumowanie zostało wygenerowane dla wszystkich zawodników. \n\nPozdrawiam!";
+  
+  MailApp.sendEmail(recipient, subject, body);
+  Logger.log("Wysłano wiadomość e-mail do: " + recipient);
 }
 
 // Funkcja do aktualizacji tygodniowego arkusza

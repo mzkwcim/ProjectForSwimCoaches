@@ -154,10 +154,6 @@ function findMainTaskRow(sheet) {
   return -1;
 }
 
-function generateTable() {
-  // Implement logic for generating the table here
-}
-
 function forceAuth() {
   var ui = SpreadsheetApp.getUi();
   ui.alert('Autoryzacja zakończona sukcesem!');
